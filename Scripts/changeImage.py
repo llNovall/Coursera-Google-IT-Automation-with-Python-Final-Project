@@ -8,15 +8,20 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 def get_file_list(dirpath):
-    if len(dirpath) == 0:
+    '''
+    This method returns a list of path of files within the specified dirpath.
+    It returns a file path list if all goes well otherwise returns None.
+    '''
+    if len(dirpath) == 0: #Checks if dirpath is empty
         logging.error("Provided source path is empty")
         return None
-    if not os.path.isdir(dirpath):
+    if not os.path.isdir(dirpath):#Checks if directory exists at dirpath
         logging.error("Provided source path is not a directory")
         return None
 
     file_list = set()
 
+    #This loop will add filepaths to file_list
     for file in os.scandir(dirpath):
         logging.info("File path added : {}".format(file.path))
         file_list.add(file.path)
@@ -24,6 +29,10 @@ def get_file_list(dirpath):
     return file_list
 
 def validate_image(srcpath):
+    '''
+    This method checks if file at srcpath is a valid image.
+    If it is an image, then it returns image otherwise return None.
+    '''
     try:
         logging.info("Attempting to open image at : {}".format(srcpath))
         image = Image.open(srcpath)
@@ -31,17 +40,22 @@ def validate_image(srcpath):
         return image
     except FileNotFoundError:
         logging.error("Image is missing at source path :" + srcpath)
+        return None
     except PIL.UnidentifiedImageError:
         logging.error("Failed to identify image at source path :" + srcpath)
-
+        return None
     return None
 
 def image_formatting(image, srcpath, destpath, width, height, conversion, format):
-        file_name = os.path.basename(srcpath)
-        image.resize((width, height)).convert(conversion).save(destpath + file_name, format)
-        logging.info("Saved file as : {}".format(file_name))
+    '''
+    This method resizes, converts and formats before saving it at destination.
+    '''
+    file_name = os.path.basename(srcpath)
+    image.resize((width, height)).convert(conversion).save(destpath + file_name, format)
+    logging.info("Saved file as : {}".format(file_name))
 
 if __name__ == "__main__":
+    
     if len(sys.argv) > 1 and len(sys.argv) < 4:
         src = sys.argv[1]
         if not os.path.exists(src):
