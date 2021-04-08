@@ -24,7 +24,8 @@ def get_file_list(dirpath):
     #This loop will add filepaths to file_list
     for file in os.scandir(dirpath):
         logging.info("File path added : {}".format(file.path))
-        file_list.add(file.path)
+        if os.path.isfile(file):
+            file_list.add(file.path)
 
     return file_list
 
@@ -55,7 +56,7 @@ def image_formatting(image, srcpath, destpath, width, height, conversion, format
     logging.info("Saved file as : {}".format(file_name))
 
 if __name__ == "__main__":
-    
+
     if len(sys.argv) > 1 and len(sys.argv) < 4:
         src = sys.argv[1]
         if not os.path.exists(src):
