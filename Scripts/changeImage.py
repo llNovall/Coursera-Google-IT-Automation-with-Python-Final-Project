@@ -12,7 +12,7 @@ def get_file_list(dirpath):
     This method returns a list of path of files within the specified dirpath.
     It returns a file path list if all goes well otherwise returns None.
     '''
-    if len(dirpath) == 0: #Checks if dirpath is empty
+    if dirpath == "": #Checks if dirpath is empty
         logging.error("Provided source path is empty")
         return None
     if not os.path.isdir(dirpath):#Checks if directory exists at dirpath
