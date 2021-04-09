@@ -4,6 +4,7 @@ import shutil
 import psutil
 import socket
 import logging
+import time
 
 logging.basicConfig(level=logging.INFO)
 
@@ -52,11 +53,11 @@ def check_memory_usage():
     This method checks memory usage.
     If free memory is below 500 MB, then an error email is sent to the receiver.
     '''
-     free_memory = psutil.virtual_memory()[4]
-     free_memory_mb = convert_bytes_to_megabytes(free_memory)
-     logging.info("Current free memory : {}".format(free_memory_mb))
-     if free_memory_mb < 500:
-         report_email("Error - Available memory is less than 500MB")
+    free_memory = psutil.virtual_memory()[4]
+    free_memory_mb = convert_bytes_to_megabytes(free_memory)
+    logging.info("Current free memory : {}".format(free_memory_mb))
+    if free_memory_mb < 500:
+        report_email("Error - Available memory is less than 500MB")
 
 def check_if_localhost_is_resolved():
     '''
@@ -64,19 +65,23 @@ def check_if_localhost_is_resolved():
     If not, an error email is sent to the receiver.
     '''
     resolved = False
-     try:
-         if "127.0.0.1" == socket.gethostbyname("localhost"):
+    try:
+        if "127.0.0.1" == socket.gethostbyname("localhost"):
             resolved = True
-         else:
+        else:
             resolved = False
-     except:
-         resolved = False
+    except:
+        resolved = False
 
-     if not resolved:
-         report_email("Error - localhost cannot be resolved to 127.0.0.1")
+    if not resolved:
+        report_email("Error - localhost cannot be resolved to 127.0.0.1")
 
 if __name__ == "__main__":
-    check_cpu_usage()
-    check_disk_usage()
-    check_memory_usage()
-    print(check_if_localhost_is_resolved())
+
+    starttime = time.time()
+    while True:
+        check_cpu_usage()
+        check_disk_usage()
+        check_memory_usage()
+        check_if_localhost_is_resolved()
+        time.sleep(60.0 - ((time.time() -starttime) % 60.0))

@@ -8,7 +8,7 @@ import sys
 
 logging.basicConfig(level=logging.INFO)
 
-url = "http://localhost/upload"
+url = "http://localhost/upload/"
 
 def get_valid_image_paths(srcpath):
     '''
@@ -41,6 +41,7 @@ def post_image(imagepath):
     '''
     with open(imagepath, 'rb') as opened:
         r = requests.post(url, files={'file':opened})
+        logging.info(r)
 
 if __name__ == "__main__":
 

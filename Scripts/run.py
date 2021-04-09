@@ -9,7 +9,7 @@ import changeImage
 
 logging.basicConfig(level=logging.INFO)
 
-url = "http://ipaddress/fruits"
+url = "http://localhost/fruits/"
 
 def get_data_from_text_file(srcpath,extention):
     '''
@@ -32,7 +32,7 @@ def get_data_from_text_file(srcpath,extention):
     with open(srcpath, 'r',encoding='utf8') as file: #Opens file
 
         logging.info("Reading from file : {}".format(srcpath))
-        data = [line.strip() for line in file.readlines()] #Reads all lines from file
+        data = [line.strip() for line in file.readlines() if line != ""] #Reads all lines from file
         return data
 
     return None
@@ -48,6 +48,7 @@ def get_image_name(fileName, textToSearch, textToReplace):
                 result = re.sub(textToSearch, textToReplace, fileName)
 
                 if result is not None:
+                    print(result)
                     return result
                 else:
                     logging.error("Failed to replace text: {}".format(srcpath))
@@ -89,9 +90,9 @@ def format_data(data, fields):
     if len(data) == 0: #Checks if data is empty
         logging.error("Data is missing.")
         return None
-    if len(fields) != len(data): #Checks if data and fields have equal length
-        logging.error("Number of fields doesn't match number of data entries.")
-        return None
+    #if len(fields) != len(data): #Checks if data and fields have equal length
+        #logging.error("Number of fields doesn't match number of data entries.")
+        #return None
 
     formatted_data = {}
     for index in range(len(fields)):
@@ -101,7 +102,8 @@ def format_data(data, fields):
     return formatted_data
 
 def post_data(dataToPost):
-    requests.post(url, data = dataToPost)
+    r = requests.post(url, data = dataToPost)
+    logging.info(r)
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:

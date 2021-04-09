@@ -52,8 +52,9 @@ def image_formatting(image, srcpath, destpath, width, height, conversion, format
     This method resizes, converts and formats before saving it at destination.
     '''
     file_name = os.path.basename(srcpath)
-    image.resize((width, height)).convert(conversion).save(destpath + file_name, format)
-    logging.info("Saved file as : {}".format(file_name))
+    image.resize((width, height)).convert(conversion).save(destpath + os.path.splitext(file_name)[0]+"."+ format.lower(), format)
+    logging.info("Saved file as : {}".format(destpath + os.path.splitext(file_name)[0]+"."+format.lower()))
+
 
 if __name__ == "__main__":
 
@@ -77,6 +78,7 @@ if __name__ == "__main__":
                     if image is not None:
                         image_formatting(image,filepath,dest, 600, 400, "RGB", "JPEG")
                         image.close()
+                        os.remove(filepath)
             else:
                 logging.warning("No files found at source path : {}".format(src))
 

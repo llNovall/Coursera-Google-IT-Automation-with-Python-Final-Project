@@ -30,9 +30,9 @@ def generate_attachment(attachment_path):
                         data = run.get_data_from_text_file(path, ".txt")
                         if data is not None:
                             if len(data) == 3:
-                                paragraph.append("name :{}".format(data[0]))
+                                paragraph.append("name: {}".format(data[0]))
                                 paragraph.append("<br/>")
-                                paragraph.append("weight:{}".format(data[1]))
+                                paragraph.append("weight: {}".format(data[1]))
                                 paragraph.append("<br/><br/>")
                             else:
                                 logging.error("Missing fields.")
